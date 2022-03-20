@@ -1,38 +1,15 @@
 import Phaser from "phaser"
+import TextureKeys from "../consts/TextureKey"
+import SceneKeys from "../consts/SceneKey"
+import AnimationKeys from "../consts/AnimationKey"
 
 export default class Game extends Phaser.Scene {
 
     constructor () {
-        super('game')
-    }
-
-    preload () {
-        // Carga del fondo
-        this.load.image('background', 'house/bg_repeat_340x640.png')
-
-        // Carga del personaje
-        this.load.atlas(
-            'rocket-mouse',
-            'characters/rocket-mouse.png',
-            'characters/rocket-mouse.json'
-        )
+        super(SceneKeys.Game)
     }
 
     create () {
-
-        // Animacion del personaje de correr
-        this.anims.create({
-            key: 'rocket_mouse_run', // Nombre de la animacion
-            frames: this.anims.generateFrameNames('rocket-mouse',{
-                start: 1,
-                end: 4,
-                prefix: 'rocketmouse_run',
-                zeroPad: 2,
-                suffix: '.png'
-            }),
-            frameRate: 10,
-            repeat: -1 // -1 es loop infinito
-        })
 
         // Medidas de la ventana
         const width = this.scale.width
@@ -48,9 +25,9 @@ export default class Game extends Phaser.Scene {
         this.add.sprite(
             width * 0.5,
             height * 0.5,
-            'rocket-mouse', // Key del atlas declarado mas arriba
+            TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
-        ).play('rocket_mouse_run')
+        ).play(AnimationKeys.RocketMouseRun)
     }
 
 }
