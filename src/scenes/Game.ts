@@ -6,18 +6,6 @@ export default class Game extends Phaser.Scene {
         super('game')
     }
 
-    preload () {
-        // Carga del fondo
-        this.load.image('background', 'house/bg_repeat_340x640.png')
-
-        // Carga del personaje
-        this.load.atlas(
-            'rocket-mouse',
-            'characters/rocket-mouse.png',
-            'characters/rocket-mouse.json'
-        )
-    }
-
     create () {
 
         // Animacion del personaje de correr
