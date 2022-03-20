@@ -33,11 +33,18 @@ export default class Game extends Phaser.Scene {
         const body = mouse.body as Phaser.Physics.Arcade.Body
         body.setCollideWorldBounds(true)
 
+        // Añadimos velocidad de movimiento en el eje X
+        body.setVelocityX(200)
+
         // Colocamos las fisicas necesarias
         this.physics.world.setBounds(
             0, 0,
             Number.MAX_SAFE_INTEGER, height - 38 // width, height
         )
+
+        // Hacemos que la camara siga a nuestro personaje
+        this.cameras.main.startFollow(mouse)
+        this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
     }
 
 }
