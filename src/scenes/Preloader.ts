@@ -1,10 +1,11 @@
 import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
+import SceneKeys from "../consts/SceneKey"
 
 export default class Preloader extends Phaser.Scene {
 
     constructor () {
-        super('preloader')
+        super(SceneKeys.Preloader)
     }
 
     preload () {
@@ -35,7 +36,7 @@ export default class Preloader extends Phaser.Scene {
             repeat: -1 // -1 es loop infinito
         })
 
-        this.scene.start('game')
+        this.scene.start(SceneKeys.Game)
     }
 
 }

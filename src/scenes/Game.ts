@@ -1,10 +1,11 @@
 import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
+import SceneKeys from "../consts/SceneKey"
 
 export default class Game extends Phaser.Scene {
 
     constructor () {
-        super('game')
+        super(SceneKeys.Game)
     }
 
     create () {
