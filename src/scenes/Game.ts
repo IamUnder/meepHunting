@@ -23,7 +23,12 @@ export default class Game extends Phaser.Scene {
         // Estructura para poner una imagen que repita de manera automatica el tamaño de la ventana
         this.background = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0)
         .setScrollFactor(0, 0) // Habilita el scroll infinito del fondo
-        
+        // Añadimos la decoración del background
+        this.add.image(
+            Phaser.Math.Between(900, 1500), // x value
+            501, // y value
+            TextureKeys.MouseHole
+        )
         
         // Creacion del personaje
         const mouse = this.physics.add.sprite(
