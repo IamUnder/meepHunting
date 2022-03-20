@@ -5,6 +5,9 @@ import AnimationKeys from "../consts/AnimationKey"
 
 export default class Game extends Phaser.Scene {
 
+    // Creamos la clase del background
+    private background!: Phaser.GameObjects.TileSprite
+
     constructor () {
         super(SceneKeys.Game)
     }
@@ -18,16 +21,18 @@ export default class Game extends Phaser.Scene {
         
         //this.add.image(0, 0, 'background').setOrigin(0, 0)
         // Estructura para poner una imagen que repita de manera automatica el tamaño de la ventana
-        this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0)
+        this.background = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0)
+        .setScrollFactor(0, 0) // Habilita el scroll infinito del fondo
         
         
         // Creacion del personaje
         const mouse = this.physics.add.sprite(
             width * 0.5,
-            height * 0.5,
+            height - 30, // Ponemos y en el tope del suelo
             TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
-        ).play(AnimationKeys.RocketMouseRun)
+        ).setOrigin(0.5, 1) // Lo establecemos como pie
+        .play(AnimationKeys.RocketMouseRun)
 
         // Colocamos colision al personaje
         const body = mouse.body as Phaser.Physics.Arcade.Body
@@ -45,6 +50,10 @@ export default class Game extends Phaser.Scene {
         // Hacemos que la camara siga a nuestro personaje
         this.cameras.main.startFollow(mouse)
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
+    }
+
+    update(time: number, delta: number): void {
+        this.background.setTilePosition(this.cameras.main.scrollX)
     }
 
 }
