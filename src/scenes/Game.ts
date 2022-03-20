@@ -20,6 +20,20 @@ export default class Game extends Phaser.Scene {
 
     create () {
 
+        // Animacion del personaje de correr
+        this.anims.create({
+            key: 'rocket_mouse_run', // Nombre de la animacion
+            frames: this.anims.generateFrameNames('rocket-mouse',{
+                start: 1,
+                end: 4,
+                prefix: 'rocketmouse_run',
+                zeroPad: 2,
+                suffix: '.png'
+            }),
+            frameRate: 10,
+            repeat: -1 // -1 es loop infinito
+        })
+
         // Medidas de la ventana
         const width = this.scale.width
         const height = this.scale.height
@@ -36,7 +50,7 @@ export default class Game extends Phaser.Scene {
             height * 0.5,
             'rocket-mouse', // Key del atlas declarado mas arriba
             'rocketmouse_fly01.png'
-        )
+        ).play('rocket_mouse_run')
     }
 
 }
