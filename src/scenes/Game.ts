@@ -7,6 +7,8 @@ export default class Game extends Phaser.Scene {
 
     // Creamos la clase del background
     private background!: Phaser.GameObjects.TileSprite
+    // Creamos la clase para la decoracion
+    private mouseHole!: Phaser.GameObjects.Image
 
     constructor () {
         super(SceneKeys.Game)
@@ -24,7 +26,7 @@ export default class Game extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, width, height, 'background').setOrigin(0)
         .setScrollFactor(0, 0) // Habilita el scroll infinito del fondo
         // Añadimos la decoración del background
-        this.add.image(
+        this.mouseHole = this.add.image(
             Phaser.Math.Between(900, 1500), // x value
             501, // y value
             TextureKeys.MouseHole
@@ -59,6 +61,22 @@ export default class Game extends Phaser.Scene {
 
     update(time: number, delta: number): void {
         this.background.setTilePosition(this.cameras.main.scrollX)
+
+        this.wrapMouseHole()
+    }
+
+    private wrapMouseHole () {
+        const scrollX = this.cameras.main.scrollX
+        const rightEdge = scrollX + this.scale.width
+
+        if (this.mouseHole.x + this.mouseHole.width < scrollX) {
+            
+            this.mouseHole.x = Phaser.Math.Between(
+                rightEdge + 100,
+                rightEdge + 1000
+            )
+
+        }
     }
 
 }
