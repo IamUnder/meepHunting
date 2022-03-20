@@ -1,6 +1,7 @@
 import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
 import SceneKeys from "../consts/SceneKey"
+import AnimationKeys from "../consts/AnimationKey"
 
 export default class Game extends Phaser.Scene {
 
@@ -26,7 +27,7 @@ export default class Game extends Phaser.Scene {
             height * 0.5,
             TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
-        ).play('rocket_mouse_run')
+        ).play(AnimationKeys.RocketMouseRun)
     }
 
 }
