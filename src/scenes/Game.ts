@@ -22,12 +22,22 @@ export default class Game extends Phaser.Scene {
         
         
         // Creacion del personaje
-        this.add.sprite(
+        const mouse = this.physics.add.sprite(
             width * 0.5,
             height * 0.5,
             TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
         ).play(AnimationKeys.RocketMouseRun)
+
+        // Colocamos colision al personaje
+        const body = mouse.body as Phaser.Physics.Arcade.Body
+        body.setCollideWorldBounds(true)
+
+        // Colocamos las fisicas necesarias
+        this.physics.world.setBounds(
+            0, 0,
+            Number.MAX_SAFE_INTEGER, height - 38 // width, height
+        )
     }
 
 }
