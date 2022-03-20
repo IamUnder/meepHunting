@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+import TextureKeys from "../consts/TextureKey"
 
 export default class Preloader extends Phaser.Scene {
 
@@ -8,11 +9,11 @@ export default class Preloader extends Phaser.Scene {
 
     preload () {
         // Carga del fondo
-        this.load.image('background', 'house/bg_repeat_340x640.png')
+        this.load.image(TextureKeys.Background, 'house/bg_repeat_340x640.png')
 
         // Carga del personaje
         this.load.atlas(
-            'rocket-mouse',
+            TextureKeys.RocketMouse,
             'characters/rocket-mouse.png',
             'characters/rocket-mouse.json'
         )

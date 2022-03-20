@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+import TextureKeys from "../consts/TextureKey"
 
 export default class Game extends Phaser.Scene {
 
@@ -22,7 +23,7 @@ export default class Game extends Phaser.Scene {
         this.add.sprite(
             width * 0.5,
             height * 0.5,
-            'rocket-mouse', // Key del atlas declarado mas arriba
+            TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
         ).play('rocket_mouse_run')
     }
