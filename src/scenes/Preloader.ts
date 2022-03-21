@@ -13,6 +13,13 @@ export default class Preloader extends Phaser.Scene {
         // Carga del fondo
         this.load.image(TextureKeys.Background, 'house/bg_repeat_340x640.png')
 
+        // Carga de decoracion del background
+        this.load.image(TextureKeys.MouseHole, 'house/object_mousehole.png') // Agujero 
+        this.load.image(TextureKeys.Window1, 'house/object_window1.png') // ventana 1
+        this.load.image(TextureKeys.Window2, 'house/object_window2.png') // ventana 2
+        this.load.image(TextureKeys.Bookcase1, 'house/object_bookcase1.png') // libreria 1
+        this.load.image(TextureKeys.Bookcase2, 'house/object_bookcase2.png') // libreria 2
+
         // Carga del personaje
         this.load.atlas(
             TextureKeys.RocketMouse,
