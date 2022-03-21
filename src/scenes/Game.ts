@@ -34,11 +34,11 @@ export default class Game extends Phaser.Scene {
         
         // Creacion del personaje
         const mouse = this.physics.add.sprite(
-            width * 0.5,
+            width  - 100,
             height - 30, // Ponemos y en el tope del suelo
             TextureKeys.RocketMouse,
             'rocketmouse_fly01.png'
-        ).setOrigin(0.5, 1) // Lo establecemos como pie
+        ).setOrigin(1.75, 1) // Lo establecemos como pie
         .play(AnimationKeys.RocketMouseRun)
 
         // Colocamos colision al personaje
