@@ -7,6 +7,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
 
     private flames!: Phaser.GameObjects.Sprite
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
+    private mouse!: Phaser.GameObjects.Sprite
 
     constructor (scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y)
@@ -15,7 +16,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         this.cursors = scene.input.keyboard.createCursorKeys()
 
         // Creacion del personaje
-        const mouse = scene.add.sprite(
+        this.mouse = scene.add.sprite(
             0,
             0, // Ponemos y en el tope del suelo
             TextureKeys.RocketMouse,
@@ -32,14 +33,14 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
             this.enableFlames(false)
 
         this.add(this.flames)
-        this.add(mouse)
+        this.add(this.mouse)
 
         // Añadimos fisicas al personaje
         scene.physics.add.existing(this)
         
         const body = this.body as Phaser.Physics.Arcade.Body
-        body.setSize(mouse.width, mouse.height)
-        body.setOffset(mouse.width * -1.75, -mouse.height)
+        body.setSize(this.mouse.width, this.mouse.height)
+        body.setOffset(this.mouse.width * -1.75, -this.mouse.height)
     }
 
     preUpdate () {
@@ -48,9 +49,19 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         if (this.cursors.space?.isDown) {
             body.setAccelerationY(-600)
             this.enableFlames(true)
+
+            // Animacion
+            this.mouse.play(AnimationKeys.RocketMouseFly, true)
         } else {
             body.setAccelerationY(0)
             this.enableFlames(false)
+        }
+
+        // comprobamos si toca el suelo
+        if (body.blocked.down) {
+            this.mouse.play(AnimationKeys.RocketMouseRun, true)
+        } else {
+            this.mouse.play(AnimationKeys.RocketMouseFall, true)
         }
     }
 

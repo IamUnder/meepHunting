@@ -44,6 +44,24 @@ export default class Preloader extends Phaser.Scene {
             repeat: -1 // -1 es loop infinito
         })
 
+        // Animacion de vuelo
+        this.anims.create({
+            key: AnimationKeys.RocketMouseFly,
+            frames: [{
+                key: TextureKeys.RocketMouse,
+                frame: 'rocketmouse_fly01.png'
+            }]
+        })
+
+        // Animacion de caida
+        this.anims.create({
+            key: AnimationKeys.RocketMouseFall,
+            frames: [{
+                key: TextureKeys.RocketMouse,
+                frame: 'rocketmouse_fall01.png'
+            }]
+        })
+
         // Animacion de las llamas
         this.anims.create({
             key: AnimationKeys.RocketMouseRun,
