@@ -2,6 +2,7 @@ import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
 import SceneKeys from "../consts/SceneKey"
 import AnimationKeys from "../consts/AnimationKey"
+import RocketMouse from "../game/RocketMouse"
 
 export default class Game extends Phaser.Scene {
 
@@ -68,13 +69,16 @@ export default class Game extends Phaser.Scene {
         this.bookcases = [this.bookcase1, this.bookcase2]
 
         // Creacion del personaje
-        const mouse = this.physics.add.sprite(
-            width  - 100,
-            height - 30, // Ponemos y en el tope del suelo
-            TextureKeys.RocketMouse,
-            'rocketmouse_fly01.png'
-        ).setOrigin(1.75, 1) // Lo establecemos como pie
-        .play(AnimationKeys.RocketMouseRun)
+        // const mouse = this.physics.add.sprite(
+        //     width  - 100,
+        //     height - 30, // Ponemos y en el tope del suelo
+        //     TextureKeys.RocketMouse,
+        //     'rocketmouse_fly01.png'
+        // ).setOrigin(1.75, 1) // Lo establecemos como pie
+        // .play(AnimationKeys.RocketMouseRun)
+
+        const mouse = new RocketMouse(this, width * 0.5, height - 30)
+        this.add.existing(mouse)
 
         // Colocamos colision al personaje
         const body = mouse.body as Phaser.Physics.Arcade.Body

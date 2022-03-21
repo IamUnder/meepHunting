@@ -33,7 +33,7 @@ export default class Preloader extends Phaser.Scene {
         // Animacion del personaje de correr
         this.anims.create({
             key: AnimationKeys.RocketMouseRun, // Nombre de la animacion
-            frames: this.anims.generateFrameNames('rocket-mouse',{
+            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse,{
                 start: 1,
                 end: 4,
                 prefix: 'rocketmouse_run',
@@ -42,6 +42,35 @@ export default class Preloader extends Phaser.Scene {
             }),
             frameRate: 10,
             repeat: -1 // -1 es loop infinito
+        })
+
+        // Animacion de vuelo
+        this.anims.create({
+            key: AnimationKeys.RocketMouseFly,
+            frames: [{
+                key: TextureKeys.RocketMouse,
+                frame: 'rocketmouse_fly01.png'
+            }]
+        })
+
+        // Animacion de caida
+        this.anims.create({
+            key: AnimationKeys.RocketMouseFall,
+            frames: [{
+                key: TextureKeys.RocketMouse,
+                frame: 'rocketmouse_fall01.png'
+            }]
+        })
+
+        // Animacion de las llamas
+        this.anims.create({
+            key: AnimationKeys.RocketMouseRun,
+            frames: this.anims.generateFrameNames(TextureKeys.RocketMouse, {
+                start: 1,
+                end: 2,
+                prefix: 'flares',
+                suffix: '.png'
+            })
         })
 
         this.scene.start(SceneKeys.Game)
