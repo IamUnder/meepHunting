@@ -8,9 +8,10 @@ export default class Game extends Phaser.Scene {
 
     // Creamos la clase del background
     private background!: Phaser.GameObjects.TileSprite
-    // Clase del personake
-    private mouseHole!: Phaser.GameObjects.Image
+    // Clase del personaje
+    private mouse!: RocketMouse
     // Creamos la clase para la decoracion
+    private mouseHole!: Phaser.GameObjects.Image
     private window1!: Phaser.GameObjects.Image
     private window2!: Phaser.GameObjects.Image
     private bookcase1!: Phaser.GameObjects.Image
@@ -76,12 +77,13 @@ export default class Game extends Phaser.Scene {
         this.add.existing(this.laserObstacle)
 
         // Creacion del personaje
-        const mouse = new RocketMouse(this, width * 0.5, height - 30)
-        this.add.existing(mouse)
+        this.mouse = new RocketMouse(this, width * 0.5, height - 30)
+        this.add.existing(this.mouse)
 
         // Colocamos colision al personaje
-        const body = mouse.body as Phaser.Physics.Arcade.Body
+        const body = this.mouse.body as Phaser.Physics.Arcade.Body
         body.setCollideWorldBounds(true)
+        body.setVelocityX(200)
 
         // Añadimos velocidad de movimiento en el eje X
         body.setVelocityX(200)
@@ -93,13 +95,13 @@ export default class Game extends Phaser.Scene {
         )
 
         // Hacemos que la camara siga a nuestro personaje
-        this.cameras.main.startFollow(mouse)
+        this.cameras.main.startFollow(this.mouse)
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
 
         // Overlappin entre personaje y obstaculo
         this.physics.add.overlap(
             this.laserObstacle,
-            mouse,
+            this.mouse,
             this.hadleOverlapLaser,
             undefined,
             this
@@ -223,6 +225,8 @@ export default class Game extends Phaser.Scene {
     }
 
     private hadleOverlapLaser (obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
-        console.log('overlap!!!!!');
+        const mouse = obj2 as RocketMouse
+
+        mouse.kill()
     }
 }
