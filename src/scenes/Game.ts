@@ -95,6 +95,15 @@ export default class Game extends Phaser.Scene {
         // Hacemos que la camara siga a nuestro personaje
         this.cameras.main.startFollow(mouse)
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
+
+        // Overlappin entre personaje y obstaculo
+        this.physics.add.overlap(
+            this.laserObstacle,
+            mouse,
+            this.hadleOverlapLaser,
+            undefined,
+            this
+        )
     }
 
     // Funcion de actualizacion de ventana
@@ -211,5 +220,9 @@ export default class Game extends Phaser.Scene {
             body.position.x = this.laserObstacle.x + body.offset.x
             body.position.y = this.laserObstacle.y
         }
+    }
+
+    private hadleOverlapLaser (obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
+        console.log('overlap!!!!!');
     }
 }
