@@ -104,7 +104,7 @@ export default class Game extends Phaser.Scene {
         this.wrapWindows()
         this.wrapBookcase()
         this.wrapLaserObstacle()
-        
+
         this.background.setTilePosition(this.cameras.main.scrollX)
     }
 
@@ -197,7 +197,9 @@ export default class Game extends Phaser.Scene {
         const scrollX = this.cameras.main.scrollX
         const rightEdge = scrollX + this.scale.width
 
-        const width = this.laserObstacle.width
+        const body = this.laserObstacle.body as Phaser.Physics.Arcade.StaticBody    
+
+        const width = body.width
         if (this.laserObstacle.x + width < scrollX) {
             this.laserObstacle.x = Phaser.Math.Between(
                 rightEdge + 800,
@@ -205,6 +207,9 @@ export default class Game extends Phaser.Scene {
             )
 
             this.laserObstacle.y = Phaser.Math.Between(0, 300)
+
+            body.position.x = this.laserObstacle.x + body.offset.x
+            body.position.y = this.laserObstacle.y
         }
     }
 }
