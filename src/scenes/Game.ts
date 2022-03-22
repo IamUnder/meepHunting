@@ -1,8 +1,8 @@
 import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
 import SceneKeys from "../consts/SceneKey"
-import AnimationKeys from "../consts/AnimationKey"
 import RocketMouse from "../game/RocketMouse"
+import LaserObstacle from "../game/LaserObstacle"
 
 export default class Game extends Phaser.Scene {
 
@@ -68,15 +68,11 @@ export default class Game extends Phaser.Scene {
         this.windows = [this.window1, this.window2]
         this.bookcases = [this.bookcase1, this.bookcase2]
 
-        // Creacion del personaje
-        // const mouse = this.physics.add.sprite(
-        //     width  - 100,
-        //     height - 30, // Ponemos y en el tope del suelo
-        //     TextureKeys.RocketMouse,
-        //     'rocketmouse_fly01.png'
-        // ).setOrigin(1.75, 1) // Lo establecemos como pie
-        // .play(AnimationKeys.RocketMouseRun)
+        // Creacion de los obstaculos
+        const laserObstacle = new LaserObstacle(this, 900, 100)
+        this.add.existing(laserObstacle)
 
+        // Creacion del personaje
         const mouse = new RocketMouse(this, width * 0.5, height - 30)
         this.add.existing(mouse)
 
