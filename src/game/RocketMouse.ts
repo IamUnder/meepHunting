@@ -1,3 +1,9 @@
+enum MouseState{
+    Running,
+    Killed,
+    Dead
+}
+
 import Phaser from "phaser"
 
 import TextureKeys from "../consts/TextureKey"
@@ -8,6 +14,7 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     private flames!: Phaser.GameObjects.Sprite
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
     private mouse!: Phaser.GameObjects.Sprite
+    private mouseState = MouseState.Running
 
     constructor (scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y)
@@ -44,29 +51,66 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     }
 
     preUpdate () {
+
         const body = this.body as Phaser.Physics.Arcade.Body
 
-        if (this.cursors.space?.isDown) {
-            body.setAccelerationY(-600)
-            this.enableFlames(true)
-
-            // Animacion
-            this.mouse.play(AnimationKeys.RocketMouseFly, true)
-        } else {
-            body.setAccelerationY(0)
-            this.enableFlames(false)
+        switch (this.mouseState) {
+            case MouseState.Running:
+                
+                
+                if (this.cursors.space?.isDown) {
+                    body.setAccelerationY(-600)
+                    this.enableFlames(true)
+                    
+                    // Animacion
+                    this.mouse.play(AnimationKeys.RocketMouseFly, true)
+                } else {
+                    body.setAccelerationY(0)
+                    this.enableFlames(false)
+                }
+                
+                // comprobamos si toca el suelo
+                if (body.blocked.down) {
+                    this.mouse.play(AnimationKeys.RocketMouseRun, true)
+                } else if (body.velocity.y > 0) {
+					this.mouse.play(AnimationKeys.RocketMouseFall, true)
+				}
+                
+                break;
+            case MouseState.Dead:
+                body.setVelocity(0, 0)
+                break
+            case MouseState.Killed:
+                
+                body.velocity.x *= 0.99
+                
+                if (body.velocity.x <= 5) {
+                    this.mouseState = MouseState.Dead
+                } else {
+                    this.mouseState = MouseState.Running
+                }
+                break
         }
 
-        // comprobamos si toca el suelo
-        if (body.blocked.down) {
-            this.mouse.play(AnimationKeys.RocketMouseRun, true)
-        } else {
-            this.mouse.play(AnimationKeys.RocketMouseFall, true)
-        }
     }
 
     enableFlames (enabled: boolean) {
         this.flames.setVisible(enabled)
+    }
+
+    kill () {
+
+        if (this.mouseState !== MouseState.Running) {
+            return
+        }
+
+        this.mouseState = MouseState.Killed
+
+        this.mouse.play(AnimationKeys.RocketMouseDead)
+
+        const body = this.body as Phaser.Physics.Arcade.Body
+        body.setAccelerationY(0)
+        this.enableFlames(false)
     }
 
 }

@@ -1,19 +1,23 @@
 import Phaser from "phaser"
 import TextureKeys from "../consts/TextureKey"
 import SceneKeys from "../consts/SceneKey"
-import AnimationKeys from "../consts/AnimationKey"
 import RocketMouse from "../game/RocketMouse"
+import LaserObstacle from "../game/LaserObstacle"
 
 export default class Game extends Phaser.Scene {
 
     // Creamos la clase del background
     private background!: Phaser.GameObjects.TileSprite
+    // Clase del personaje
+    private mouse!: RocketMouse
     // Creamos la clase para la decoracion
     private mouseHole!: Phaser.GameObjects.Image
     private window1!: Phaser.GameObjects.Image
     private window2!: Phaser.GameObjects.Image
     private bookcase1!: Phaser.GameObjects.Image
     private bookcase2!: Phaser.GameObjects.Image
+    // Clase para los obstaculos
+    private laserObstacle!: LaserObstacle
     // Clases para evitar el overlapping
     private windows: Phaser.GameObjects.Image[] = []
     private bookcases: Phaser.GameObjects.Image[] = []
@@ -68,21 +72,18 @@ export default class Game extends Phaser.Scene {
         this.windows = [this.window1, this.window2]
         this.bookcases = [this.bookcase1, this.bookcase2]
 
-        // Creacion del personaje
-        // const mouse = this.physics.add.sprite(
-        //     width  - 100,
-        //     height - 30, // Ponemos y en el tope del suelo
-        //     TextureKeys.RocketMouse,
-        //     'rocketmouse_fly01.png'
-        // ).setOrigin(1.75, 1) // Lo establecemos como pie
-        // .play(AnimationKeys.RocketMouseRun)
+        // Creacion de los obstaculos
+        this.laserObstacle = new LaserObstacle(this, 900, 100)
+        this.add.existing(this.laserObstacle)
 
-        const mouse = new RocketMouse(this, width * 0.5, height - 30)
-        this.add.existing(mouse)
+        // Creacion del personaje
+        this.mouse = new RocketMouse(this, width * 0.5, height - 30)
+        this.add.existing(this.mouse)
 
         // Colocamos colision al personaje
-        const body = mouse.body as Phaser.Physics.Arcade.Body
+        const body = this.mouse.body as Phaser.Physics.Arcade.Body
         body.setCollideWorldBounds(true)
+        body.setVelocityX(200)
 
         // Añadimos velocidad de movimiento en el eje X
         body.setVelocityX(200)
@@ -94,17 +95,28 @@ export default class Game extends Phaser.Scene {
         )
 
         // Hacemos que la camara siga a nuestro personaje
-        this.cameras.main.startFollow(mouse)
+        this.cameras.main.startFollow(this.mouse)
         this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height)
+
+        // Overlappin entre personaje y obstaculo
+        this.physics.add.overlap(
+            this.laserObstacle,
+            this.mouse,
+            this.hadleOverlapLaser,
+            undefined,
+            this
+        )
     }
 
     // Funcion de actualizacion de ventana
     update(time: number, delta: number): void {
-        this.background.setTilePosition(this.cameras.main.scrollX)
-
+        
         this.wrapMouseHole()
         this.wrapWindows()
         this.wrapBookcase()
+        this.wrapLaserObstacle()
+
+        this.background.setTilePosition(this.cameras.main.scrollX)
     }
 
     // Funcion para recalcular la posicion del agujero
@@ -189,5 +201,32 @@ export default class Game extends Phaser.Scene {
 
             this.bookcase2.visible = !overlap
         }
+    }
+
+    // Funcion para la repeteticion de obstaculos
+    private wrapLaserObstacle () {
+        const scrollX = this.cameras.main.scrollX
+        const rightEdge = scrollX + this.scale.width
+
+        const body = this.laserObstacle.body as Phaser.Physics.Arcade.StaticBody    
+
+        const width = body.width
+        if (this.laserObstacle.x + width < scrollX) {
+            this.laserObstacle.x = Phaser.Math.Between(
+                rightEdge + 800,
+                rightEdge + width + 1000
+            )
+
+            this.laserObstacle.y = Phaser.Math.Between(0, 300)
+
+            body.position.x = this.laserObstacle.x + body.offset.x
+            body.position.y = this.laserObstacle.y
+        }
+    }
+
+    private hadleOverlapLaser (obj1: Phaser.GameObjects.GameObject, obj2: Phaser.GameObjects.GameObject) {
+        const mouse = obj2 as RocketMouse
+
+        mouse.kill()
     }
 }
